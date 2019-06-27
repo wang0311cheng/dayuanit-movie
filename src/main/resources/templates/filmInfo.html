@@ -1,0 +1,162 @@
+<html>
+<head>
+
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <!-- import JavaScript -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <style>
+        .el-row {
+            margin-bottom: 20px;
+        &:last-child {
+             margin-bottom: 0;
+         }
+        }
+        .el-col {
+            border-radius: 4px;
+        }
+        .bg-purple-dark {
+            background: #99a9bf;
+        }
+        .bg-purple {
+            background: #d3dce6;
+        }
+        .bg-purple-light {
+            background: #e5e9f2;
+        }
+        .grid-content {
+            border-radius: 4px;
+            min-height: 36px;
+        }
+        .row-bg {
+            padding: 10px 0;
+            background-color: #f9fafc;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="app">
+    <el-row>
+        <el-col :span="4">
+            <div class="grid-content" >
+                <img :src="'/picture/' + filmInfo.filmPic" height="280" width="200">
+            </div>
+        </el-col>
+        <el-col :span="20">
+            <div class="grid-content ">
+                <el-row>
+                    <el-col :span="24"><div class="grid-content">{{filmInfo.filmName}}</div></el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24"><div class="grid-content">{{filmInfo.filmType}}</div></el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24"><div class="grid-content">{{filmInfo.filmTime}}</div></el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24"><div class="grid-content">{{filmInfo.filmShowTime}}</div></el-col>
+                </el-row>
+
+                <el-row>
+                    <el-col :span="24">
+                        <div class="grid-content">
+                            <el-button type="danger" @click="buyTicket">特惠购票</el-button>
+                        </div>
+                    </el-col>
+                </el-row>
+            </div>
+        </el-col>
+    </el-row>
+
+    <el-divider content-position="left"></el-divider>
+
+    <div>
+        <el-tag>剧情简介</el-tag>
+        <el-card class="box-card">
+            {{filmInfo.plot}}
+        </el-card>
+    </div>
+
+    <el-divider content-position="left"></el-divider>
+
+    <div>
+        <el-tag>导演</el-tag>
+        <el-row>
+            <el-col :span="6" v-for="xx in filmActors.dy">
+                <div class="grid-content">
+                    <img :src="'/picture/' + xx.actorPic">
+                </div>
+                {{xx.actorName}}
+            </el-col>
+        </el-row>
+    </div>
+
+    <el-divider content-position="left"></el-divider>
+
+    <div>
+        <el-tag>演员</el-tag>
+        <el-row>
+            <el-col :span="6" v-for="xx in filmActors.yy">
+                <div class="grid-content">
+                    <img :src="'/picture/' + xx.actorPic">
+                </div>
+                {{xx.actorName}}
+            </el-col>
+        </el-row>
+    </div>
+
+
+
+</div>
+
+</body>
+
+<script>
+    new Vue({
+        el : '#app',
+        data : {
+            filmInfo : [],
+            filmId : [[${filmId}]],
+            fit: 'fill',
+            filmActors : ""
+        },
+        created : function () {
+            this.loadFilm();
+            this.loadActor();
+        },
+        methods : {
+            loadFilm : function () {
+                var that = this
+                axios.get('/film/' + that.filmId)
+                    .then(function (response) {
+                        that.filmInfo = response.data.data;
+                    })
+            },
+            loadActor : function () {
+                var that = this
+                axios.get('/film/actor/' + that.filmId)
+                    .then(function (response) {
+                        that.filmActors = response.data.data;
+                    })
+            },
+            buyTicket : function () {
+                // window.location.href = "http://www.baidu.com"
+                // window.location.href = "/toTicketInfo/" + this.filmId
+                window.open("/toTicketInfo/" + this.filmId)
+            }
+        }
+    })
+</script>
+
+</html>
+
+
+
+

@@ -1,0 +1,47 @@
+<configuration debug="true" scan="true" scanPeriod="30 seconds">
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] [%-5level] [%logger-%M:%L] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>C:/javaProject/Log/movie/movie.log</file>
+        <append>true</append>
+        <immediateFlush>true</immediateFlush>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] [%-5level] [%logger-%M:%L] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--单独提取某个类的日志-->
+    <!--<appender name="payFile" class="ch.qos.logback.core.FileAppender">-->
+        <!--<file>C:/javaProject/Log/atm_02/wxBind.log</file>-->
+        <!--<append>true</append>-->
+        <!--<immediateFlush>true</immediateFlush>-->
+        <!--<encoder>-->
+            <!--<pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] [%-5level] [%logger-%M:%L] - %msg%n</pattern>-->
+        <!--</encoder>-->
+    <!--</appender>-->
+
+    <!--利用队列，提高性能，当小桶装满时再写到磁盘里-->
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="FILE" />
+        <queueSize>512</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+    </appender>
+
+    <!--单独提取某个类的日志，但是要在WxBindController类里面重新创建Logger，并使用重新创建好的来记录日志-->
+    <!--additivity="true" false代表不继续传递                                        -->
+    <!--<logger name="demo1.controller.WxBindController" level="info" additivity="true">-->
+        <!--<appender-ref ref="payFile" />-->
+    <!--</logger>-->
+
+
+    <root level="info">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
+        <!--<appender-ref ref="ASYNC" />-->
+    </root>
+
+</configuration>
