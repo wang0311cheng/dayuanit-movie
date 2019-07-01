@@ -1,86 +1,71 @@
 package com.dayuanit.movie.test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Test {
 
-    public static final int[] num = {2, 9, 5, 7, 3, 6};
+    public static int[] nums = {2, 9, 5, 3, 1, 6, 7, 0};
+
+    public static int[] heapArray = new int[nums.length + 1];
+    // 当前节点所在的下标
+    public static int size;
 
     public static void main(String[] args) {
-//        Integer a = new Integer(3);
-//        Integer b =3;
-//        Integer d =3;
-//        int c = 3;
-//        System.out.println(a==b);
-//        System.out.println(a==c);
-//        System.out.println(c==b);
-//        System.out.println(d==b);
-//        int[] a = {1,2,3,4,5};
-//        System.out.println(a.length);
-//        ArrayList<Object> objects = new ArrayList<>();
-//        objects.add(1);
-//        objects.add(2);
-//        objects.add(3);
-//        System.out.println(objects.size());
-//        int a = 5;
-//        int b = 4;
-//        int c = a;
-//        a = b;
-//        System.out.println(a);
-        maopao();
-        xuanze();
-        charu();
-    }
 
-    public static void maopao(){
-        for (int i =0; i<num.length-1;i++){
-            for (int j =0;j<num.length-1-i;j++){
-                if (num[j]>num[j+1]){
-                    int temp = num[j];
-                    num[j] = num[j+1];
-                    num[j+1] = temp;
-                }
-            }
+        for (int num : nums){
+            add(num);
         }
+        System.out.println(Arrays.toString(heapArray));
 
-        System.out.println(Arrays.toString(num));
-    }
-
-    public static void xuanze(){
-        for (int i = 0; i<num.length-1; i++){
-            // 定义一个默认的最小值
-            int min = i;
-            // 拿当前后面的值跟他比
-            for (int j = i+1; j<num.length; j++){
-                // 判断 当前的min的值还是不是最小的，不是就重新赋值
-                if (num[min] > num[j]){
-//                    不是就重新赋值
-                    min = j;
-                }
-            }
-            // 判断如果min与i不相等，则说明最小值已经变掉
-            if (min != i){
-                int temp = num[min];
-                num[min] = num[i];
-                num[i] = temp;
-            }
+        for (int i=0; i<8; i++) {
+            System.out.print(remove());
         }
-
-        System.out.println(Arrays.toString(num));
     }
 
-    public static void charu(){
+    public static void swqp(int index1,int index2){
+        int tmp = heapArray[index1];
+        heapArray[index1] = heapArray[index2];
+        heapArray[index2] = tmp;
+    }
 
-        for (int i = 0; i<num.length-1; i++){
-            for (int j = i+1; j>0 && num[j] < num[j-1];j--){
-                int temp = num[j];
-                num[j] = num[j-1];
-                num[j-1] = temp;
+    public static void add(int ele){
+        heapArray[++size] = ele;
+        int currentParent = size/2;
+        int currentNode = size;
+
+        while (currentParent > 0){
+
+            if (heapArray[currentNode] < heapArray[currentParent]){
+                swqp(currentNode,currentParent);
+                currentNode = currentParent;
+                currentParent = currentParent / 2;
+                continue;
             }
+            break;
         }
-
-        System.out.println(Arrays.toString(num));
     }
 
+    public static int remove(){
+        int targetNode = heapArray[1];
+        swqp(1,size--);
+        int currentNode = 1;
+        while (true){
+            int left = currentNode * 2;
+            int right = currentNode * 2 + 1;
+            int min = currentNode;
+            if (left < size && heapArray[min] > heapArray[left]){
+                min = left;
+            }
+            if (right < size && heapArray[min] > heapArray[right]){
+                min = right;
+            }
+            if (min != currentNode){
+                swqp(min,currentNode);
+                currentNode = min;
+                continue;
+            }
+            break;
+        }
+        return targetNode;
+    }
 }

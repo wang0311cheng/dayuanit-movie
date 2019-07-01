@@ -6,6 +6,9 @@ import com.dayuanit.movie.entry.Order;
 import com.dayuanit.movie.handler.AliPayHandler;
 import com.dayuanit.movie.service.FilmService;
 import com.dayuanit.movie.service.OrderService;
+import com.dayuanit.movie.test.HeapSort;
+import com.dayuanit.movie.test.OrderNode;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +29,8 @@ public class PayController extends BaseController {
     private FilmService filmService;
     @Autowired
     private AliPayHandler aliPayHandler;
+    @Autowired
+    HeapSort<OrderNode> heapSort;
 
     @RequestMapping(value = "/pay/toPay/{filmId}/{cinemaId}/{sceneId}")
     public ResponseDTO toPay(@PathVariable int filmId,
@@ -35,6 +40,11 @@ public class PayController extends BaseController {
         // TODO 创建订单
         Order order = orderService.createOrder(filmId, cinemaId, sceneId, seatInfo);
         Film film = filmService.getFilm(filmId);
+
+        // TODO 把订单信息放到优先级队列中
+        OrderNode orderNode = new OrderNode(order.getId(),System.currentTimeMillis() + 30 * 1000);
+        heapSort.add(orderNode);
+        // TODO 生成支付URL地址
         String payForm = aliPayHandler.createPayForm(order, film);
         return ResponseDTO.success(payForm);
     }

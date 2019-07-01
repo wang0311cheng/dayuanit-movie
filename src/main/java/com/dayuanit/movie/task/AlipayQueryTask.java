@@ -20,8 +20,8 @@ public class AlipayQueryTask extends BaseTask {
 
     @Scheduled(cron = "0/10 * * * * *")
     public void doTask() {
-        System.out.println("AlipayQueryTask ...");
-        processQuery();
+//        System.out.println("AlipayQueryTask ...");
+//        processQuery();
     }
 
     public void processQuery(){

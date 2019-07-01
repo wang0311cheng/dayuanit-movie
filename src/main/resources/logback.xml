@@ -6,7 +6,7 @@
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>C:/javaProject/Log/movie/movie.log</file>
+        <file>/javaProject/Log/movie/movie.log</file>
         <append>true</append>
         <immediateFlush>true</immediateFlush>
         <encoder>

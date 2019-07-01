@@ -21,14 +21,13 @@ public class OrderCancelTask extends BaseTask {
 
     @Scheduled(cron = "0/15 * * * * *")
     public void doTask() {
-        processCancel();
+//        processCancel();
     }
 
     public void processCancel(){
 
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.MINUTE,-2);
-
         List<Order> orders = orderMapper.listOrder4Cancel(OrderStatusEnums.待付款.getK(),cal.getTime());
 
         for (Order order : orders){
